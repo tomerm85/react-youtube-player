@@ -15,9 +15,14 @@ const io = socket(server, {
 
 const youtubePlaylist = [];
 io.on('connection', (socket) => {
-
+    //test log
     console.log('made socket connection', socket.id);
 
     //send current youtube playlist
     socket.emit('playListInit', youtubePlaylist);
+
+    // //
+    // socket.on('updateVideoList', (data) => {
+    //     socket.broadcast.emit('updateVideoList', data);
+    // });
 });

@@ -3,12 +3,14 @@
   import PlaylistItem from '../playlist-item/playlist-item';
   import './playlist-view.scss';
 
-  const PlaylistView = ({ videos = []}) => {
+  const PlaylistView = ({ videosList = []}) => {
     return (
       <div className="playlist-view">
-        {videos.map((video, index) => {
+        {videosList.map((videoItem, index) => {
+          const {videoId} = videoItem;
+          const key = `${videoId}_${index}`;
           return (
-            <PlaylistItem key={index} video={video}/>
+            <PlaylistItem key={key} video={videoItem}/>
           );
         })}
       </div>

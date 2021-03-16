@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useDispatch} from "react-redux";
 import YouTube from 'react-youtube';
 
+import {SocketContext} from '../../context/socket-io';
 import { removeFirstVideoFromList } from '../../redux/videos/videos.actions';
 
 const YoutubePlayer = ({ videosList }) => {
+  const socket = useContext(SocketContext);
   const [videoToPlay, setVideoToPlay] = useState({});
   const dispatch = useDispatch();
   const opts = {
@@ -15,6 +17,12 @@ const YoutubePlayer = ({ videosList }) => {
       autoplay: 1,
     },
   };
+  
+  useEffect(() => {
+    if (videosList.length > 0) {
+      setVideoToPlay(videosList[0]);
+    }
+  }, []);
 
   useEffect(() => {
     if (videosList.length === 1) {
@@ -32,6 +40,8 @@ const YoutubePlayer = ({ videosList }) => {
     }
     setVideoToPlay({});
     dispatch(removeFirstVideoFromList());
+    //remove video from server
+    socket.emit('removeVideo');
   }
 
   return (

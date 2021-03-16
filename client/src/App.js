@@ -1,35 +1,38 @@
-import {useEffect, useRef} from 'react';
+import {useEffect} from 'react';
 import {useSelector, useDispatch} from "react-redux";
-import io from "socket.io-client";
+import {SocketContext, socket} from './context/socket-io';
 
 import PlaylistManager from './components/playlist-manager/playlist-manager';
 import YoutubePlayer from './components/youtube-player/youtube-player';
-import {replaceVideosList} from './redux/videos/videos.actions';
+import {replaceVideosList, addVideoToList} from './redux/videos/videos.actions';
 import './App.scss';
 
 function App() {
   const videosList = useSelector(state => state.videos.videosList);
   const dispatch = useDispatch();
-  const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io.connect("http://localhost:4000");
-    socketRef.current.on("playListInit", (data) => {
-      console.log({data}); // todo remove
-      dispatch(replaceVideosList(data));
-    })
+    socket.on("playListInit", (videosToAdd) => {
+      if (videosToAdd.length > 0) {
+        dispatch(replaceVideosList(videosToAdd));
+      }
+    });
+
+    socket.on('addVideo', (video) => {
+      dispatch(addVideoToList(video));
+    });
+
+    //close the socket connection on close
+    return () => socket.disconnect();
   }, []);
 
-  useEffect(() => {
-    //socketRef.current.emit("updateVideoList", videosList);
-    console.log('vl: ', videosList);
-  }, [videosList]);
-
   return (
-    <div className="App">
-      <PlaylistManager videosList={videosList} />
-      <YoutubePlayer videosList={videosList} />
-    </div>
+      <SocketContext.Provider value={socket}>
+        <div className="App">
+          <PlaylistManager videosList={videosList} />
+          <YoutubePlayer videosList={videosList} />
+        </div>
+      </SocketContext.Provider>   
   );
 }
 

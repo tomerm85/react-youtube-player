@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {useSelector, useDispatch} from "react-redux";
-import io from "socket.io-client";
+import React, {useState, useContext} from 'react';
+import {useDispatch} from "react-redux";
+import {SocketContext} from '../../context/socket-io';
 
 import {addVideoToList} from '../../redux/videos/videos.actions';
 import './playlist-add-video.scss';
 
 const PlaylistAddVideo = () => {
+  const socket = useContext(SocketContext);
   const [videoUrl, setVideoUrl] = useState('');
   const dispatch = useDispatch();
 
@@ -28,7 +29,8 @@ const PlaylistAddVideo = () => {
         videoId
       };
       dispatch(addVideoToList(video));
-      
+      //add video to server with socket
+      socket.emit('addVideo', video);
     }
     setVideoUrl('');
   };

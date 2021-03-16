@@ -6,8 +6,8 @@ instructions:
 3) go to http://localhost:3000/ on the browser
 
 if the above doesn't work:
-5) npm install on root folder
-6) npm install on client folder
-7) npm run server on root folder
-8) npm start on client folder
-9) go to http://localhost:3000/ on the browser
+1) npm install on root folder
+2) npm install on client folder
+3) npm run server on root folder
+4) npm start on client folder
+5) go to http://localhost:3000/ on the browser

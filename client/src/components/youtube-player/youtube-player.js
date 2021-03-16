@@ -40,7 +40,7 @@ const YoutubePlayer = ({ videosList }) => {
     }
     setVideoToPlay({});
     dispatch(removeFirstVideoFromList());
-    //remove video from server
+    //remove video from server with socket
     socket.emit('removeVideo');
   }
 

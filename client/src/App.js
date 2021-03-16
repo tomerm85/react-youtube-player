@@ -4,7 +4,7 @@ import {SocketContext, socket} from './context/socket-io';
 
 import PlaylistManager from './components/playlist-manager/playlist-manager';
 import YoutubePlayer from './components/youtube-player/youtube-player';
-import {replaceVideosList, addVideoToList} from './redux/videos/videos.actions';
+import {replaceVideosList, addVideoToList, removeVideoFromList} from './redux/videos/videos.actions';
 import './App.scss';
 
 function App() {
@@ -20,6 +20,10 @@ function App() {
 
     socket.on('addVideo', (video) => {
       dispatch(addVideoToList(video));
+    });
+
+    socket.on('removeVideoAtIndex', (videoToRemove) => {
+      dispatch(removeVideoFromList(videoToRemove));
     });
 
     //close the socket connection on close

@@ -1,5 +1,5 @@
 import { VideosActionTypes } from './videos.types';
-import { removeFirstItem } from './videos.utils';
+import { removeFirstItem, removeItemFromList } from './videos.utils';
 
 const INITIAL_STATE = {
   videosList: []
@@ -17,6 +17,9 @@ const videosReducer = (state = INITIAL_STATE, action = {}) => {
       break;
     case VideosActionTypes.REMOVE_FIRST_VIDEO_FROM_LIST:
       newState =  {...state, videosList: removeFirstItem(state.videosList)};
+      break;
+    case VideosActionTypes.REMOVE_VIDEO_FROM_LIST:
+      newState =  {...state, videosList: removeItemFromList(state.videosList, payload)};
       break;
     default:
       newState = state;

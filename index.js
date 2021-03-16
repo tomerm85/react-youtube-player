@@ -12,6 +12,15 @@ const io = socket(server, {
     }
 });
 
+const removeItemFromList = (arrayToRemoveFrom = [], videoToRemove) => {
+  const indexToRemove = arrayToRemoveFrom.findIndex((item) => videoToRemove.videoId === item.videoId);
+  if (indexToRemove > -1) {
+    arrayToRemoveFrom.splice(indexToRemove, 1);
+    const arrayToReturn = [...arrayToRemoveFrom];
+    return arrayToReturn;
+  }
+};
+
 const youtubePlaylist = [];
 io.on('connection', (socket) => {
   //send current youtube playlist to a new client
@@ -26,5 +35,11 @@ io.on('connection', (socket) => {
   //remove just played video from youtube playlist
   socket.on('removeVideo', () => {
     youtubePlaylist.shift();
+  });
+
+  //
+  socket.on('removeVideoAtIndex', (videoToRemove) => {
+    removeItemFromList(youtubePlaylist, videoToRemove);
+    socket.broadcast.emit('removeVideoAtIndex', videoToRemove);
   });
 });
